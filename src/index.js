@@ -5,6 +5,12 @@ import express from 'express';
 import uuidv4 from 'uuid/v4';
 import routes from './routes';
 import models, { connectDb } from './models';
+import passport from 'passport';
+const passportJWT = require("passport-jwt");
+const JWTStrategy = passportJWT.Strategy;
+const ExtractJWT = passportJWT.ExtractJwt;
+
+const LocalStrategy = require('passport-local').Strategy;
 
 const app = express();
 
@@ -21,9 +27,37 @@ app.use(async (req, res, next) => {
 });
 
 app.use('/api/recipetest', routes.recipetest);
-app.use('/api/recipe', routes.recipe);
+app.use('/api/recipe', passport.authenticate('jwt', {session: false}), routes.recipe);
 app.use('/api/category', routes.category);
-app.use('/api/user', routes.user);
+app.use('/api/userlist', routes.userList);
+app.use('/api/auth', routes.auth);
+app.use('/api/user', passport.authenticate('jwt', {session: false}), routes.user);
+
+app.use(passport.initialize());
+passport.use(new LocalStrategy({
+        usernameField: 'email',
+        passwordField: 'password'
+    },
+    models.User.authenticate()
+));
+passport.serializeUser(models.User.serializeUser());
+passport.deserializeUser(models.User.deserializeUser());
+passport.use(new JWTStrategy({
+        jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+        secretOrKey   : 'ILovePokemon'
+    },
+    function (jwtPayload, cb) {
+
+        //find the user in db if needed. This functionality may be omitted if you store everything you'll need in JWT payload.
+        return models.User.findById(jwtPayload.id)
+            .then(user => {
+                return cb(null, user);
+            })
+            .catch(err => {
+                return cb(err);
+            });
+    }
+));
 
 connectDb().then(async () => {
   // await Promise.all([

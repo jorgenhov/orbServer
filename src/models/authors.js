@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
-const userSchema = new mongoose.Schema({
-  user: {
+const authorsSchema = new mongoose.Schema({
+  author: {
     type: String,
     required: true,
     unique: true,
@@ -11,8 +11,8 @@ const userSchema = new mongoose.Schema({
     required: true,
     default: Date.now
   },
-});
+})
 
-const User = mongoose.model('User', userSchema);
+const Authors = mongoose.model('Authors', authorsSchema);
 
-export default User;
+export default Authors;
