@@ -1,3 +1,5 @@
+//Ikkje brukt lenger
+
 import { Router } from 'express';
 
 const router = Router();

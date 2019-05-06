@@ -29,7 +29,7 @@ app.use(async (req, res, next) => {
 app.use('/api/recipetest', routes.recipetest);
 app.use('/api/recipe', passport.authenticate('jwt', {session: false}), routes.recipe);
 app.use('/api/category', routes.category);
-app.use('/api/userlist', routes.userList);
+app.use('/api/author', routes.authors);
 app.use('/api/auth', routes.auth);
 app.use('/api/user', passport.authenticate('jwt', {session: false}), routes.user);
 

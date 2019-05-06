@@ -1,3 +1,5 @@
+//Ikkje brukt lenger
+
 import mongoose from 'mongoose';
 
 const userListSchema = new mongoose.Schema({
