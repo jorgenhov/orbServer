@@ -44,7 +44,7 @@ passport.serializeUser(models.User.serializeUser());
 passport.deserializeUser(models.User.deserializeUser());
 passport.use(new JWTStrategy({
         jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-        secretOrKey   : 'ILovePokemon'
+        secretOrKey   : process.env.SECRET_OR_KEY
     },
     function (jwtPayload, cb) {
 
